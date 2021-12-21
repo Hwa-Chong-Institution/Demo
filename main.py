@@ -16,15 +16,20 @@ boxes = pytesseract.image_to_boxes(img)
 for b in boxes.splitlines():
     b = b.split()
     x, y, w, h = int(b[1]), int(b[2]), int(b[3]), int(b[4])
-    tiles = img[y:y,x:x]
     # cv2.rectangle(img, (x, hImg - y), (w, hImg - h), (0, 255, 0), 1)
-    cv2.rectangle(img, (x, hImg - y), (w, h), (0, 255, 0), 1)
+    # cv2.rectangle(img, (x, hImg - y), (w, h), (0, 255, 0), 1)
 
-    # img1 = Image.open("./handwritten_1.jpeg")
-    # box = (x, hImg - y, w, h)
-    # region = img1.crop(box)
-    # region.show()
-    # cv2.putText(img, b[0], (x, hImg - y), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 255), 2)
+    # cropped_img = img[y:hImg-y, x:hImg-h]
+    # cv2.imshow("cropped", cropped_img)
+    # cv2.waitKey(0)
+
+    print([[x, y, w, h, hImg, wImg], [x, hImg-y, w, hImg-h]])
+
+    img1 = Image.open("./handwritten_1.jpeg")
+    box = (10, 10, 10, 10)
+    region = img1.crop(box)
+    region.show()
+    cv2.putText(img, b[0], (x, hImg - y), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 255), 2)
 
 cv2.imshow("Image", img)
 cv2.waitKey();  
