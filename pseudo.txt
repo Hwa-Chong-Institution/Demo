@@ -1,0 +1,4 @@
+1. Isolate singular characters from words/sentences
+2. Identify strokes of each character
+3. Comapare each computer character to each handwritten stroke; the greater the difference between the computer character is to the 
+    handwritten character, the less likely it is to be that character
