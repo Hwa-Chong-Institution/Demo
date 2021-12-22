@@ -9,9 +9,10 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 # gray_image.show()
 
 img = cv2.imread("./handwritten_1.jpeg")
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 hImg, wImg, _ = img.shape
+print(_)
 boxes = pytesseract.image_to_boxes(img)
 for b in boxes.splitlines():
     b = b.split()
@@ -25,11 +26,11 @@ for b in boxes.splitlines():
 
     print([[x, y, w, h, hImg, wImg], [x, hImg-y, w, hImg-h]])
 
-    img1 = Image.open("./handwritten_1.jpeg")
-    box = (10, 10, 10, 10)
-    region = img1.crop(box)
-    region.show()
-    cv2.putText(img, b[0], (x, hImg - y), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 255), 2)
+    # img1 = Image.open("./handwritten_1.jpeg")
+    # box = (10, 10, 10, 10)
+    # region = img1.crop(box)
+    # region.show()
+    # cv2.putText(img, b[0], (x, hImg - y), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 255), 2)
 
 cv2.imshow("Image", img)
 cv2.waitKey();  
