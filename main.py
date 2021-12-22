@@ -1,36 +1,59 @@
-from PIL import Image, ImageOps
-import pytesseract
-import cv2
+from PIL import Image
+from scipy import stats
+import numpy as np
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
+img = Image.open("handwritten_2.jpeg")
+img = img.convert("L")
+# img.show()
+img_numpy = np.array(img)
 
-# image = Image.open("./yuheng.jpg")
-# gray_image = ImageOps.grayscale(image)
-# gray_image.show()
+# Getting grayscale value of every pixel in image
+x, y = (img_numpy > 0).nonzero()
+data = img_numpy[x, y]
 
-img = cv2.imread("./handwritten_1.jpeg")
-# img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-# img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-hImg, wImg, _ = img.shape
-print(_)
-boxes = pytesseract.image_to_boxes(img)
-for b in boxes.splitlines():
-    b = b.split()
-    x, y, w, h = int(b[1]), int(b[2]), int(b[3]), int(b[4])
-    # cv2.rectangle(img, (x, hImg - y), (w, hImg - h), (0, 255, 0), 1)
-    # cv2.rectangle(img, (x, hImg - y), (w, h), (0, 255, 0), 1)
+# Checking for the most common (grayscale) colour to be set as background
+colour, count = stats.mode(data)    
 
-    # cropped_img = img[y:hImg-y, x:hImg-h]
-    # cv2.imshow("cropped", cropped_img)
-    # cv2.waitKey(0)
+# Correcting text colour to be black
+corrected = np.where(data < colour - 30, 0, data)
 
-    print([[x, y, w, h, hImg, wImg], [x, hImg-y, w, hImg-h]])
+print(x[(corrected == 0)], y[(corrected == 0)])
+gamer = []
 
-    # img1 = Image.open("./handwritten_1.jpeg")
-    # box = (10, 10, 10, 10)
-    # region = img1.crop(box)
-    # region.show()
-    # cv2.putText(img, b[0], (x, hImg - y), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 255), 2)
+for i in range(len(x[(corrected == 0)])):
+    if x[(corrected == 0)][i] + 1 not in x[(corrected == 0)]:
+        print(x[(corrected == 0)][i])
+        gamer.append(x[(corrected == 0)][i])
 
-cv2.imshow("Image", img)
-cv2.waitKey();  
+# for i in range(len(data)):
+#     print(img_numpy[x[(data < colour - 30)], y[(data < colour - 30)]])
+
+
+testing = Image.open("handwritten_2.jpeg").convert("L")
+pixels = testing.load()
+
+count = 0
+for i in range(img.size[0]):
+    for j in gamer:
+        print(f"iterating {count}")
+        pixels[i, j] = 0
+        count += 1
+    count += 1
+
+# for i in range(img.size[0]):
+#     for j in range(img.size[1]):
+#         if colour - 30 > pixels[i, j]:
+#             print(pixels[i, j])
+#             pixels[i, j] = 0
+#         elif pixels[i, j] > 130:
+#             print(pixels[i, j])
+#             pixels[i, j] = 255
+
+
+# testing.save("./cool.png")
+testing.show()
+
+# for i in data:
+#     if not colour - 30 < i:
+#         testing 
+#         print(i)
